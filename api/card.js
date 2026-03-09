@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     });
 
     const response = await client.responses.create({
-      model: "gpt-4.1-mini",
+     model: "gpt-5-mini",
       input: `Write a warm greeting card.
 
 Person: ${person}
