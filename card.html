@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create a Card - Creativerse</title>
   <style>
     body {
@@ -23,6 +25,7 @@
       border-radius: 8px;
       border: none;
       font-size: 16px;
+      box-sizing: border-box;
     }
     textarea {
       min-height: 120px;
@@ -47,6 +50,7 @@
       border-radius: 12px;
       text-align: left;
       white-space: pre-line;
+      box-sizing: border-box;
     }
     a {
       color: #9bb4ff;
@@ -95,10 +99,10 @@
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            person,
-            occasion,
-            tone,
-            details
+            person: person,
+            occasion: occasion,
+            tone: tone,
+            details: details
           })
         });
 
