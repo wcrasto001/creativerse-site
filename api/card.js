@@ -34,9 +34,9 @@ Return only the card text.`
 
     console.error(error);
 
-    return res.status(500).json({
-      error: "Card generation failed"
-    });
+return res.status(500).json({
+  error: error.message || "Card generation failed"
+});
 
   }
 
