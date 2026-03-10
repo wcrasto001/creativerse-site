@@ -90,9 +90,14 @@
 
     <textarea id="details" placeholder="Share a few memories or details"></textarea>
 
-    <button id="generateBtn">Generate Card</button>
+<button id="generateBtn">Generate Card</button>
 
-    <div id="result" class="card-result">Your card will appear here.</div>
+<div style="margin-top:20px;">
+  <button onclick="copyCard()">📋 Copy Card</button>
+  <button onclick="generateCard()">🔁 Regenerate</button>
+</div>
+
+<div id="result" class="card-result">Your card will appear here.</div>
   </div>
 
   <script>
@@ -133,6 +138,11 @@
     }
 
     document.getElementById("generateBtn").addEventListener("click", generateCard);
+    function copyCard() {
+  const text = document.getElementById("result").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Card copied!");
+}
   </script>
 </body>
 </html>
