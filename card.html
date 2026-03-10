@@ -132,6 +132,33 @@
         result.innerText = "Sorry, there was a problem connecting to the AI service.";
       }
     }
-  </script>
-</body>
-</html>
+<script>
+async function generateCard() {
+  const person = document.getElementById("person").value;
+  const occasion = document.getElementById("occasion").value;
+  const tone = document.getElementById("tone").value;
+  const details = document.getElementById("details").value;
+  const result = document.getElementById("result");
+
+  result.innerText = "Creating your card...";
+
+  try {
+    const response = await fetch("/api/card", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ person, occasion, tone, details })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      result.innerText = data.error || "Something went wrong.";
+      return;
+    }
+
+    result.innerText = data.card || "No card was returned.";
+  } catch (error) {
+    result.innerText = "Sorry, there was a problem connecting to the AI service.";
+  }
+}
+</script>
