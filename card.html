@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,10 +13,12 @@
       padding: 60px 20px;
       margin: 0;
     }
+
     .container {
       max-width: 700px;
       margin: 0 auto;
     }
+
     input, textarea, select {
       width: 100%;
       max-width: 500px;
@@ -27,9 +29,11 @@
       font-size: 16px;
       box-sizing: border-box;
     }
+
     textarea {
       min-height: 120px;
     }
+
     button {
       padding: 12px 22px;
       background: #4F7BFF;
@@ -40,60 +44,55 @@
       cursor: pointer;
       margin-top: 10px;
     }
-    #result {
+
+    .card-result {
       margin-top: 40px;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      color: #222;
+      padding: 30px;
+      border-radius: 16px;
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
-      background: #111827;
-      padding: 24px;
-      border-radius: 12px;
-      text-align: left;
+      font-size: 18px;
+      line-height: 1.6;
       white-space: pre-line;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      text-align: left;
+      min-height: 80px;
       box-sizing: border-box;
     }
+
     a {
       color: #9bb4ff;
       text-decoration: none;
-      .card-result {
-  margin-top:40px;
-  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
-  color:#222;
-  padding:30px;
-  border-radius:16px;
-  max-width:600px;
-  margin-left:auto;
-  margin-right:auto;
-  font-size:18px;
-  line-height:1.6;
-  white-space:pre-line;
-  box-shadow:0 10px 25px rgba(0,0,0,0.3);
-}
+      display: inline-block;
+      margin-bottom: 20px;
     }
-    <div id="result" class="card-result"></div>
   </style>
 </head>
 <body>
   <div class="container">
-    <p><a href="index.html">← Back to Home</a></p>
+    <a href="index.html">← Back to Home</a>
+
     <h1>Create a Card</h1>
     <p>Turn memories into creations</p>
 
     <input id="person" placeholder="Who is the card for?">
-    <input id="occasion" placeholder="Occasion (birthday, anniversary, holiday)">
+    <input id="occasion" placeholder="Occasion (birthday, holiday, etc)">
 
     <select id="tone">
-      <option value="">Choose a tone</option>
-      <option value="heartfelt">Heartfelt</option>
-      <option value="funny">Funny</option>
-      <option value="sweet">Sweet</option>
-      <option value="formal">Formal</option>
+      <option value="Heartfelt">Heartfelt</option>
+      <option value="Funny">Funny</option>
+      <option value="Sweet">Sweet</option>
+      <option value="Romantic">Romantic</option>
     </select>
 
-    <textarea id="details" placeholder="Share a few memories or details to include"></textarea>
+    <textarea id="details" placeholder="Share a few memories or details"></textarea>
 
-    <button onclick="generateCard()">Generate Card</button>
+    <button id="generateBtn">Generate Card</button>
 
+    <div id="result" class="card-result">Your card will appear here.</div>
   </div>
 
   <script>
@@ -127,38 +126,13 @@
           return;
         }
 
-        result.innerText = data.card;
+        result.innerText = data.card || "No card was returned.";
       } catch (error) {
         result.innerText = "Sorry, there was a problem connecting to the AI service.";
       }
     }
-<script>
-async function generateCard() {
-  const person = document.getElementById("person").value;
-  const occasion = document.getElementById("occasion").value;
-  const tone = document.getElementById("tone").value;
-  const details = document.getElementById("details").value;
-  const result = document.getElementById("result");
 
-  result.innerText = "Creating your card...";
-
-  try {
-    const response = await fetch("/api/card", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ person, occasion, tone, details })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      result.innerText = data.error || "Something went wrong.";
-      return;
-    }
-
-    result.innerText = data.card || "No card was returned.";
-  } catch (error) {
-    result.innerText = "Sorry, there was a problem connecting to the AI service.";
-  }
-}
-</script>
+    document.getElementById("generateBtn").addEventListener("click", generateCard);
+  </script>
+</body>
+</html>
