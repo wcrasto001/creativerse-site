@@ -43,6 +43,7 @@
       font-size: 16px;
       cursor: pointer;
       margin-top: 10px;
+      margin-right: 8px;
     }
 
     .song-result {
@@ -55,7 +56,7 @@
       margin-left: auto;
       margin-right: auto;
       font-size: 18px;
-      line-height: 1.6;
+      line-height: 1.7;
       white-space: pre-line;
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
       text-align: left;
@@ -68,6 +69,10 @@
       text-decoration: none;
       display: inline-block;
       margin-bottom: 20px;
+    }
+
+    .action-buttons {
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -98,6 +103,11 @@
     <textarea id="details" placeholder="Share memories, qualities, or special details"></textarea>
 
     <button id="generateSongBtn">Generate Song</button>
+
+    <div class="action-buttons">
+      <button onclick="copySong()">📋 Copy Song</button>
+      <button onclick="generateSong()">🔁 Regenerate</button>
+    </div>
 
     <div id="result" class="song-result">Your song will appear here.</div>
   </div>
@@ -145,6 +155,12 @@
       } catch (error) {
         result.innerText = "Could not reach the song generator.";
       }
+    }
+
+    function copySong() {
+      const text = document.getElementById("result").innerText;
+      navigator.clipboard.writeText(text);
+      alert("Song copied!");
     }
 
     document.getElementById("generateSongBtn").addEventListener("click", generateSong);
