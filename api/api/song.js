@@ -36,7 +36,7 @@ Return only the lyrics.`
       song: response.output_text
     });
   } catch (error) {
-    console.error(error);
+    console.error("Song generation error:", error);
 
     return res.status(500).json({
       error: error.message || "Song generation failed"
