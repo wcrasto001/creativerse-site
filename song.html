@@ -102,44 +102,47 @@
     <div id="result" class="song-result">Your song will appear here.</div>
   </div>
 
-  <script>
-    async function generateSong() {
-      const person = document.getElementById("person").value;
-      const occasion = document.getElementById("occasion").value;
-      const mood = document.getElementById("mood").value;
-      const genre = document.getElementById("genre").value;
-      const details = document.getElementById("details").value;
-      const result = document.getElementById("result");
+<script>
+  async function generateSong() {
+    const person = document.getElementById("person").value;
+    const occasion = document.getElementById("occasion").value;
+    const mood = document.getElementById("mood").value;
+    const genre = document.getElementById("genre").value;
+    const details = document.getElementById("details").value;
+    const result = document.getElementById("result");
 
-      result.innerText = "Writing your song...";
+    result.innerText = "Writing your song...";
 
-      try {
-        const response = await fetch("/api/song", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            person: person,
-            occasion: occasion,
-            mood: mood,
-            genre: genre,
-            details: details
-          })
-        });
+    try {
+      const response = await fetch("/api/song", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          person: person,
+          occasion: occasion,
+          mood: mood,
+          genre: genre,
+          details: details
+        })
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (!response.ok) {
-          result.innerText = data.error || "Something went wrong.";
-          return;
-        }
-
-        result.innerText = data.song || "No song was returned.";
-      } catch (error) {
-        result.innerText = "Sorry, there was a problem connecting to the AI service.";
+      if (!response.ok) {
+        result.innerText = data.error || "Something went wrong.";
+        return;
       }
+
+      result.innerText = data.song || "No song was returned.";
+    } catch (error) {
+      result.innerText = "Sorry, there was a problem connecting to the AI service.";
     }
+  }
+
+  document.getElementById("generateSongBtn").addEventListener("click", generateSong);
+</script>
 
     document.getElementById("generateSongBtn").addEventListener("click", generateSong);
   </script>
