@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Make a Song - Creativerse</title>
   <style>
     body {
@@ -11,10 +13,12 @@
       padding: 60px 20px;
       margin: 0;
     }
+
     .container {
       max-width: 700px;
       margin: 0 auto;
     }
+
     input, textarea, select {
       width: 100%;
       max-width: 500px;
@@ -23,10 +27,13 @@
       border-radius: 8px;
       border: none;
       font-size: 16px;
+      box-sizing: border-box;
     }
+
     textarea {
       min-height: 120px;
     }
+
     button {
       padding: 12px 22px;
       background: #4F7BFF;
@@ -37,86 +44,104 @@
       cursor: pointer;
       margin-top: 10px;
     }
-    #result {
+
+    .song-result {
       margin-top: 40px;
+      background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+      color: #222;
+      padding: 30px;
+      border-radius: 16px;
       max-width: 650px;
       margin-left: auto;
       margin-right: auto;
-      background: #111827;
-      padding: 24px;
-      border-radius: 12px;
-      text-align: left;
+      font-size: 18px;
+      line-height: 1.6;
       white-space: pre-line;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      text-align: left;
+      min-height: 80px;
+      box-sizing: border-box;
     }
+
     a {
       color: #9bb4ff;
       text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <p><a href="index.html">← Back to Home</a></p>
+    <a href="index.html">← Back to Home</a>
+
     <h1>Make a Song</h1>
     <p>Turn memories into creations</p>
 
     <input id="person" placeholder="Who is the song for?">
     <input id="occasion" placeholder="Occasion (birthday, retirement, anniversary)">
-    
+
     <select id="mood">
-      <option value="">Choose a mood</option>
-      <option value="heartfelt">Heartfelt</option>
-      <option value="funny">Funny</option>
-      <option value="celebratory">Celebratory</option>
-      <option value="romantic">Romantic</option>
+      <option value="Heartfelt">Heartfelt</option>
+      <option value="Funny">Funny</option>
+      <option value="Celebratory">Celebratory</option>
+      <option value="Romantic">Romantic</option>
     </select>
 
     <select id="genre">
-      <option value="">Choose a genre</option>
-      <option value="pop">Pop</option>
-      <option value="country">Country</option>
-      <option value="ballad">Ballad</option>
-      <option value="gospel">Gospel</option>
+      <option value="Pop">Pop</option>
+      <option value="Country">Country</option>
+      <option value="Ballad">Ballad</option>
+      <option value="Gospel">Gospel</option>
     </select>
 
-    <textarea id="details" placeholder="Share memories, qualities, or special details to include"></textarea>
+    <textarea id="details" placeholder="Share memories, qualities, or special details"></textarea>
 
-    <button onclick="generateSong()">Generate Song</button>
+    <button id="generateSongBtn">Generate Song</button>
 
-    <div id="result"></div>
+    <div id="result" class="song-result">Your song will appear here.</div>
   </div>
 
   <script>
-    function generateSong() {
+    async function generateSong() {
       const person = document.getElementById("person").value;
       const occasion = document.getElementById("occasion").value;
       const mood = document.getElementById("mood").value;
       const genre = document.getElementById("genre").value;
       const details = document.getElementById("details").value;
+      const result = document.getElementById("result");
 
-      const song = `Song for ${person || "Someone Special"}
+      result.innerText = "Writing your song...";
 
-Occasion: ${occasion || "A Special Day"}
-Mood: ${mood || "Warm"}
-Genre: ${genre || "Pop"}
+      try {
+        const response = await fetch("/api/song", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            person: person,
+            occasion: occasion,
+            mood: mood,
+            genre: genre,
+            details: details
+          })
+        });
 
-Verse 1
-Today we celebrate you in every way,
-Bringing love and laughter to this special day.
-${details ? details : "Memories fill the room and hearts shine bright,"}
-We sing this song for you tonight.
+        const data = await response.json();
 
-Chorus
-This is your moment, this is your song,
-A memory to hold and carry along.
-With joy and love in every line,
-Today we celebrate your life and shine.
+        if (!response.ok) {
+          result.innerText = data.error || "Something went wrong.";
+          return;
+        }
 
-From,
-Creativerse`;
-
-      document.getElementById("result").innerText = song;
+        result.innerText = data.song || "No song was returned.";
+      } catch (error) {
+        result.innerText = "Sorry, there was a problem connecting to the AI service.";
+      }
     }
+
+    document.getElementById("generateSongBtn").addEventListener("click", generateSong);
   </script>
 </body>
 </html>
